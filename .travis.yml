@@ -1,25 +1,27 @@
 language: minimal
-
 services: docker
-
 env:
+  matrix:
   - DOCKER_COMPOSE_VERSION=1.23.2
-
+  - KUBECTL_VERSION=1.13.7
+  - AWS_IAM_AUTHENTICATOR_VERSION=1.13.7
+  - SHA=$(git rev-parse HEAD)
+  
 before_install:
   - docker -v && docker-compose -v
   - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
+    -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
   - chmod +x ./kubectl
   - sudo mv ./kubectl /usr/local/bin/kubectl
 
-  jobs:
-    include:
-      - stage: BUILD docker images and push to registry
-        install:
-          - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel
-          - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml push
-          
+jobs:
+  include:
+    - stage: BUILD docker images and push to registry
+      install:
+        - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel
+        - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml push
