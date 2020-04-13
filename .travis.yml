@@ -18,4 +18,4 @@ before_install:
 
 
 install:
-  - docker-compose /udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel 
+  - docker-compose udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel 
