@@ -8,5 +8,6 @@ if (environment.production) {
   enableProdMode();
 }
 
+// added some comments to trigger travis 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.log(err));
