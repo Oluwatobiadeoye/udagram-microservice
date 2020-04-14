@@ -1,11 +1,19 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     service: backend-feed
   name: backend-feed
 spec:
-  replicas: 3
+  replicas: 4
+  selector:
+    matchLabels:
+      service: backend-feed
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:
@@ -14,7 +22,14 @@ spec:
       containers:
       - image: kamteezey/udacity-restapi-feed
         name: backend-feed
-        imagePullPolicy: Always  
+        imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
         resources:
           requests:
             memory: "64Mi"

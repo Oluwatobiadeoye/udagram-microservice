@@ -53,4 +53,4 @@ ionic build
 ***
 
 ### CI/CD
-The project uses Travis CI for Continuous Integration. In order to trigger a new build, new commit should be pushed to master and the build will be triggered automatically.
+The project uses Travis CI for Continuous Integration. In order to trigger a new build, new commit should be pushed to master and the build will be triggered automatically. 

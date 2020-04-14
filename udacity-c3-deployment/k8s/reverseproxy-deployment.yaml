@@ -1,20 +1,37 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     service: reverseproxy
+    version: v2
   name: reverseproxy
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      service: reverseproxy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:
         service: reverseproxy
+        version: v2
     spec:
       containers:
       - image: kamteezey/reverseproxy
         name: reverseproxy
-        imagePullPolicy: Always          
+        imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
         resources:
           requests:
             memory: "64Mi"
@@ -25,5 +42,3 @@ spec:
         ports:
         - containerPort: 8080
       restartPolicy: Always
-
-
